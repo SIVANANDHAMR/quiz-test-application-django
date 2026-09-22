@@ -1,0 +1,43 @@
+{% extends "quiz/base.html" %}
+
+{% block title %}Available quizzes · QuizLab{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="eyebrow">Practice with purpose</div>
+    <h1>Test what you know.</h1>
+    <p class="hero-copy">Choose a quiz, answer every question, and get your score instantly. Each test is short, focused, and built to help you learn.</p>
+</section>
+
+<section class="section-heading">
+    <div>
+        <div class="eyebrow">Library</div>
+        <h2>Available quizzes</h2>
+    </div>
+    <span class="count-pill">{{ quizzes|length }} quiz{{ quizzes|length|pluralize }}</span>
+</section>
+
+{% if quizzes %}
+<div class="quiz-grid">
+    {% for quiz in quizzes %}
+    <article class="quiz-card">
+        <div class="card-kicker">QUIZ {{ forloop.counter|stringformat:"02d" }}</div>
+        <h3>{{ quiz.title }}</h3>
+        <p>{{ quiz.description|default:"A focused knowledge check."|truncatewords:25 }}</p>
+        <div class="card-meta">
+            <span>{{ quiz.questions.all|length }} questions</span>
+            <span>{{ quiz.duration_minutes }} min</span>
+        </div>
+        <a class="button button-secondary" href="{{ quiz.get_absolute_url }}">Start quiz <span aria-hidden="true">→</span></a>
+    </article>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <span class="empty-icon">✦</span>
+    <h2>No published quizzes yet</h2>
+    <p>Sign in to the admin panel and publish your first quiz.</p>
+    <a class="button button-primary" href="{% url 'admin:index' %}">Open admin panel</a>
+</div>
+{% endif %}
+{% endblock %}
