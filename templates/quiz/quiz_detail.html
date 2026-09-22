@@ -1,0 +1,48 @@
+{% extends "quiz/base.html" %}
+{% load static %}
+
+{% block title %}{{ quiz.title }} · QuizLab{% endblock %}
+
+{% block content %}
+<div class="quiz-header">
+    <a class="back-link" href="{% url 'quiz:list' %}">← Back to quizzes</a>
+    <div class="eyebrow">Knowledge check</div>
+    <h1>{{ quiz.title }}</h1>
+    <p class="quiz-description">{{ quiz.description }}</p>
+    <div class="quiz-stats">
+        <span><strong>{{ question_fields|length }}</strong> questions</span>
+        <span><strong>{{ quiz.duration_minutes }}</strong> minutes</span>
+    </div>
+</div>
+
+<form class="quiz-form" method="post" action="{% url 'quiz:submit' quiz.slug %}" data-duration="{{ quiz.duration_minutes }}" id="quiz-form">
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="form-error">{{ form.non_field_errors }}</div>{% endif %}
+    <div class="form-topline">
+        <label class="name-field" for="{{ form.participant_name.id_for_label }}">
+            {{ form.participant_name.label }}
+            {{ form.participant_name }}
+        </label>
+        {% if form.participant_name.errors %}<div class="field-error">{{ form.participant_name.errors|striptags }}</div>{% endif %}
+        <div class="timer" aria-live="polite"><span class="timer-dot"></span><span id="timer">{{ quiz.duration_minutes }}:00</span> remaining</div>
+    </div>
+
+    <div class="question-list">
+        {% for question, field in question_fields %}
+        <fieldset class="question-card">
+            <legend><span class="question-number">{{ forloop.counter|stringformat:"02d" }}</span>{{ question.text }}</legend>
+            {% if field.errors %}<div class="field-error">Choose an answer to continue.</div>{% endif %}
+            <div class="choice-list">{{ field }}</div>
+        </fieldset>
+        {% endfor %}
+    </div>
+
+    <div class="submit-row">
+        <p>Your score is calculated immediately after submission.</p>
+        <button class="button button-primary" type="submit">Submit answers <span aria-hidden="true">→</span></button>
+    </div>
+</form>
+{% endblock %}
+
+{% block scripts %}<script src="{% static 'quiz/quiz.js' %}"></script>{% endblock %}
+
