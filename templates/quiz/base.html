@@ -1,0 +1,30 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A Django-powered quiz test application.">
+    <title>{% block title %}QuizLab{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'quiz/style.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <nav class="nav container" aria-label="Main navigation">
+            <a class="brand" href="{% url 'quiz:list' %}"><span class="brand-mark">Q</span> QuizLab</a>
+            <a class="nav-link" href="{% url 'quiz:list' %}">All quizzes</a>
+            <a class="nav-admin" href="{% url 'admin:index' %}">Admin</a>
+        </nav>
+    </header>
+    <main class="container page-shell">
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <span>QuizLab · Django quiz test application</span>
+            <span>Built for Python Web Development</span>
+        </div>
+    </footer>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
