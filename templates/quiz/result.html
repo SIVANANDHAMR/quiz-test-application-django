@@ -1,0 +1,25 @@
+{% extends "quiz/base.html" %}
+
+{% block title %}Your result · QuizLab{% endblock %}
+
+{% block content %}
+<section class="result-page">
+    <div class="eyebrow">Quiz complete</div>
+    <h1>Nice work, {{ attempt.participant_name }}.</h1>
+    <p class="hero-copy">Here is your result for <strong>{{ attempt.quiz.title }}</strong>.</p>
+    <div class="result-card">
+        <div class="score-ring" style="--score: {{ attempt.percentage }}%;">
+            <div><strong>{{ attempt.percentage }}%</strong><span>score</span></div>
+        </div>
+        <div class="result-copy">
+            <div class="result-label">Final score</div>
+            <h2>{{ attempt.score }} <span>/ {{ attempt.total_questions }}</span></h2>
+            <p>Completed {{ attempt.completed_at|date:"d M Y, H:i" }}</p>
+        </div>
+    </div>
+    <div class="result-actions">
+        <a class="button button-primary" href="{{ attempt.quiz.get_absolute_url }}">Try again</a>
+        <a class="button button-quiet" href="{% url 'quiz:list' %}">Choose another quiz</a>
+    </div>
+</section>
+{% endblock %}
